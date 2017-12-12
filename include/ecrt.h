@@ -1070,7 +1070,7 @@ void ecrt_master_sync_slave_clocks(
  */
 int ecrt_master_reference_clock_time(
         ec_master_t *master, /**< EtherCAT master. */
-        uint32_t *time /**< Pointer to store the queried system time. */
+        uint64_t *time /**< Pointer to store the queried system time. */
         );
 
 /** Queues the DC synchrony monitoring datagram for sending.

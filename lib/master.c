@@ -708,7 +708,7 @@ void ecrt_master_sync_slave_clocks(ec_master_t *master)
 
 /*****************************************************************************/
 
-int ecrt_master_reference_clock_time(ec_master_t *master, uint32_t *time)
+int ecrt_master_reference_clock_time(ec_master_t *master, uint64_t *time)
 {
     int ret;
 

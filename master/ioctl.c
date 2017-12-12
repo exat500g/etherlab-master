@@ -1989,7 +1989,7 @@ static ATTRIBUTES int ec_ioctl_ref_clock_time(
         ec_ioctl_context_t *ctx /**< Private data structure of file handle. */
         )
 {
-    uint32_t time;
+    uint64_t time;
     int ret;
 
     if (unlikely(!ctx->requested)) {

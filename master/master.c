@@ -277,7 +277,7 @@ int ec_master_init(ec_master_t *master, /**< EtherCAT master */
     ec_datagram_init(&master->ref_sync_datagram);
     snprintf(master->ref_sync_datagram.name, EC_DATAGRAM_NAME_SIZE,
             "refsync");
-    ret = ec_datagram_prealloc(&master->ref_sync_datagram, 4);
+    ret = ec_datagram_prealloc(&master->ref_sync_datagram, 8);
     if (ret < 0) {
         ec_datagram_clear(&master->ref_sync_datagram);
         EC_MASTER_ERR(master, "Failed to allocate reference"
@@ -288,7 +288,7 @@ int ec_master_init(ec_master_t *master, /**< EtherCAT master */
     // init sync datagram
     ec_datagram_init(&master->sync_datagram);
     snprintf(master->sync_datagram.name, EC_DATAGRAM_NAME_SIZE, "sync");
-    ret = ec_datagram_prealloc(&master->sync_datagram, 4);
+    ret = ec_datagram_prealloc(&master->sync_datagram, 8);
     if (ret < 0) {
         ec_datagram_clear(&master->sync_datagram);
         EC_MASTER_ERR(master, "Failed to allocate"
@@ -2098,9 +2098,9 @@ void ec_master_find_dc_ref_clock(
     // These calls always succeed, because the
     // datagrams have been pre-allocated.
     ec_datagram_fpwr(&master->ref_sync_datagram,
-            ref ? ref->station_address : 0xffff, 0x0910, 4);
+            ref ? ref->station_address : 0xffff, 0x0910, 8);
     ec_datagram_frmw(&master->sync_datagram,
-            ref ? ref->station_address : 0xffff, 0x0910, 4);
+            ref ? ref->station_address : 0xffff, 0x0910, 8);
 }
 
 /*****************************************************************************/
@@ -2777,7 +2777,7 @@ void ecrt_master_application_time(ec_master_t *master, uint64_t app_time)
 
 /*****************************************************************************/
 
-int ecrt_master_reference_clock_time(ec_master_t *master, uint32_t *time)
+int ecrt_master_reference_clock_time(ec_master_t *master, uint64_t *time)
 {
     if (!master->dc_ref_clock) {
         return -ENXIO;
@@ -2788,7 +2788,7 @@ int ecrt_master_reference_clock_time(ec_master_t *master, uint32_t *time)
     }
 
     // Get returned datagram time, transmission delay removed.
-    *time = EC_READ_U32(master->sync_datagram.data) -
+    *time = EC_READ_U64(master->sync_datagram.data) -
         master->dc_ref_clock->transmission_delay;
 
     return 0;
@@ -2799,7 +2799,7 @@ int ecrt_master_reference_clock_time(ec_master_t *master, uint32_t *time)
 void ecrt_master_sync_reference_clock(ec_master_t *master)
 {
     if (master->dc_ref_clock) {
-        EC_WRITE_U32(master->ref_sync_datagram.data, master->app_time);
+        EC_WRITE_U64(master->ref_sync_datagram.data, master->app_time);
         ec_master_queue_datagram(master, &master->ref_sync_datagram);
     }
 }
