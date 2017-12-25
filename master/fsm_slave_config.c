@@ -1346,6 +1346,7 @@ void ec_fsm_slave_config_state_dc_cycle(
 
     fsm->jiffies_start = jiffies;
     ec_datagram_fprd(datagram, slave->station_address, 0x092c, 4);
+    ec_datagram_zero(datagram);
     fsm->retries = EC_FSM_RETRIES;
     fsm->state = ec_fsm_slave_config_state_dc_sync_check;
 }
@@ -1405,6 +1406,7 @@ void ec_fsm_slave_config_state_dc_sync_check(
 
             // check synchrony again
             ec_datagram_fprd(datagram, slave->station_address, 0x092c, 4);
+            ec_datagram_zero(datagram);
             fsm->retries = EC_FSM_RETRIES;
             return;
         }
