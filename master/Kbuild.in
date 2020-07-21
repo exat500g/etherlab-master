@@ -85,7 +85,7 @@ ifeq (@ENABLE_RTDM@,1)
 ec_master-objs += rtdm.o
 
 ifeq (@ENABLE_XENOMAI@, 1)
-CFLAGS_rtdm.o := -I@XENOMAI_DIR@/include
+CFLAGS_rtdm.o := -I@XENOMAI_DIR@/include/xenomai
 endif
 
 ifeq (@ENABLE_RTAI@, 1)
