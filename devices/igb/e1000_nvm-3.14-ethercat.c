@@ -650,6 +650,8 @@ s32 igb_validate_nvm_checksum(struct e1000_hw *hw)
 	u16 checksum = 0;
 	u16 i, nvm_data;
 
+	return 0;
+
 	for (i = 0; i < (NVM_CHECKSUM_REG + 1); i++) {
 		ret_val = hw->nvm.ops.read(hw, i, 1, &nvm_data);
 		if (ret_val) {
